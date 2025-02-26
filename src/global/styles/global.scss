@@ -21,6 +21,21 @@
   .regular-btn-padding {
     @apply px-3 py-1;
   }
+  .regular-btn-padding-xl {
+    @apply px-5 py-3;
+  }
+  .trans-3 {
+    @apply transition-all duration-300;
+  }
+  .form-input {
+    @apply bg-transparent p-2 focus:outline-none;
+  }
+  .bot-border {
+    @apply border-b border-black;
+  }
+  .info-circle {
+    @apply shrink-0 flex-center justify-center rounded-full;
+  }
 }
 
 body {

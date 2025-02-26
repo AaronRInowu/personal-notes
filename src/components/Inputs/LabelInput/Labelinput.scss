@@ -1,0 +1,54 @@
+.lbl-container {
+  input,
+  textarea,
+  select {
+    resize: none;
+    max-height: 80px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    border-bottom-color: #000;
+    border-inline-color: #000;
+  }
+  &:has(input:focus) {
+    .place-label {
+      top: -0.5rem;
+      font-size: 0.6rem;
+    }
+  }
+  &:has(textarea:focus) {
+    .place-label {
+      top: -0.5rem;
+      font-size: 0.6rem;
+    }
+  }
+  &:has(textarea:not(:placeholder-shown)) {
+    .place-label {
+      top: -0.5rem;
+      font-size: 0.6rem;
+    }
+  }
+  &:has(input:not(:placeholder-shown)) {
+    .place-label {
+      top: -0.5rem;
+      font-size: 0.6rem;
+    }
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1%;
+    height: 1px;
+    background: linear-gradient(to right, #000, transparent);
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 10%;
+    height: 1px;
+    background: linear-gradient(to left, #000, transparent);
+  }
+}
