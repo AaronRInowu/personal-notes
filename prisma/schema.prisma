@@ -18,6 +18,7 @@ model Category {
   notes Notes[]
   createdAt DateTime @default(now())
   updatedAt DateTime?
+  isActive Boolean @default(true)
 }
 model Notes {
   id String @id @unique @default(cuid())
@@ -29,6 +30,7 @@ model Notes {
   category Category @relation(fields: [categoryId],references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime?
+  isActive Boolean @default(true)
 }
 enum NoteStatus {
   QUEUE

@@ -6,6 +6,7 @@ export default async function NewItemPage() {
     try {
       return await prisma.category.findMany();
     } catch (error) {
+      console.error(error);
       return;
     }
   };

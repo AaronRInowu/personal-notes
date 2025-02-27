@@ -11,7 +11,7 @@ export const HeaderCrumbsSet = ({
 
   useEffect(() => {
     handleNames(data);
-  }, [data]);
+  }, [handleNames, data]);
 
   return <></>;
 };

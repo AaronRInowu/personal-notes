@@ -1,13 +1,22 @@
+import { TsystemColors } from "@/global/interfaces/general.interface";
 import { TickSquare } from "iconsax-react";
-import React, { ButtonHTMLAttributes, HTMLAttributes } from "react";
+import React, { ButtonHTMLAttributes } from "react";
 
 interface ItgBtn extends ButtonHTMLAttributes<HTMLButtonElement> {
   selected?: boolean;
   text: string;
+  selectedColor?: TsystemColors | { hex: string };
 }
 
 export const ToggleButton = (props: ItgBtn) => {
-  const { selected, text, className = "", type = "button", ...rest } = props;
+  const {
+    selected,
+    text,
+    selectedColor,
+    className = "",
+    type = "button",
+    ...rest
+  } = props;
   return (
     <button
       className={`trans-3 flex-center-3 ${
@@ -25,7 +34,17 @@ export const ToggleButton = (props: ItgBtn) => {
           size={24}
           variant="Bold"
           color="currentColor"
-          className={`text-black trans-3 ${selected ? "" : "opacity-0"}`}
+          style={{
+            ...(selectedColor &&
+              typeof selectedColor === "string" && { color: selectedColor }),
+          }}
+          className={`trans-3 ${selected ? "" : "opacity-0"} ${
+            selectedColor
+              ? typeof selectedColor === "string"
+                ? `text-${selectedColor}`
+                : ""
+              : "text-black"
+          }`}
         />
       </div>
       <label className={`${props.disabled ? "" : "cursor-pointer"}`}>

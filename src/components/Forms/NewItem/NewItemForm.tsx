@@ -49,14 +49,14 @@ export const NewItemForm = ({ categories }: { categories?: Category[] }) => {
           router.refresh();
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
         toast.error(">:(", toastOptions);
       }
     }
   };
   const isValidated = () => {
     let isClean = true;
-    const { title, itemType } = formData;
+    const { title, itemType, category } = formData;
     if (!itemType) {
       setErrors((prev) => ({
         itemType: "Seleccione elemento a crear",
@@ -67,6 +67,12 @@ export const NewItemForm = ({ categories }: { categories?: Category[] }) => {
     if (!title) {
       setErrors((prev) => ({ title: "Ingrese titulo", ...prev }));
       isClean = false;
+    }
+    if (itemType === "note") {
+      if (!category || !categories?.some((c) => c.id === category)) {
+        setErrors((prev) => ({ category: "Seleccione categoria", ...prev }));
+        isClean = false;
+      }
     }
     if (isClean) {
       setErrors({});
@@ -106,6 +112,7 @@ export const NewItemForm = ({ categories }: { categories?: Category[] }) => {
       <LabelInput
         label="Titulo"
         name="title"
+        value={formData.title}
         error={errors.title}
         onChange={(e) =>
           setFormData(({ title, ...rest }) => ({
@@ -117,6 +124,7 @@ export const NewItemForm = ({ categories }: { categories?: Category[] }) => {
       <LabelArea
         label="Descripción"
         name="desc"
+        value={formData.desc}
         error={errors.desc}
         onChange={(e) =>
           setFormData(({ desc, ...rest }) => ({

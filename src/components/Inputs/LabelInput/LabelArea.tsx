@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import React, { TextareaHTMLAttributes } from "react";
 import "./Labelinput.scss";
 
 interface IlblInp extends TextareaHTMLAttributes<HTMLTextAreaElement> {

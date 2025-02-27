@@ -8,3 +8,21 @@ export const postCategory = async (temp: Prisma.CategoryCreateInput) => {
 export const postNote = async (temp: Prisma.NotesUncheckedCreateInput) => {
   return await prisma.notes.create({ data: temp });
 };
+export const patchNote = async (id: string, temp: Prisma.NotesUpdateInput) => {
+  return await prisma.notes.update({ data: temp, where: { id: id } });
+};
+export const patchCategory = async (
+  id: string,
+  temp: Prisma.CategoryUpdateInput
+) => {
+  return await prisma.category.update({ data: temp, where: { id: id } });
+};
+export const deleteItem = async (id: string, type: "note" | "cat") => {
+  if (type === "note") {
+    return await prisma.notes.delete({ where: { id: id } });
+  }
+  if (type === "cat") {
+    return await prisma.category.delete({ where: { id: id } });
+  }
+  return { status: 404, msg: "no table" };
+};

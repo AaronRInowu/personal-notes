@@ -2,6 +2,7 @@
   input,
   textarea,
   select {
+    border-radius: 0.75rem;
     resize: none;
     max-height: 80px;
     overflow: hidden;
@@ -9,13 +10,13 @@
     border-bottom-color: #000;
     border-inline-color: #000;
   }
-  &:has(input:focus) {
+  &:has(input:focus):not(:read-only) {
     .place-label {
       top: -0.5rem;
       font-size: 0.6rem;
     }
   }
-  &:has(textarea:focus) {
+  &:has(textarea:focus):not(:read-only) {
     .place-label {
       top: -0.5rem;
       font-size: 0.6rem;
@@ -36,8 +37,8 @@
   &::after {
     content: "";
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 4px;
+    top: 3px;
     width: 1%;
     height: 1px;
     background: linear-gradient(to right, #000, transparent);
@@ -45,8 +46,8 @@
   &::before {
     content: "";
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 4px;
+    top: 3px;
     width: 10%;
     height: 1px;
     background: linear-gradient(to left, #000, transparent);

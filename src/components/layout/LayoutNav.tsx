@@ -8,8 +8,7 @@ import React, { Fragment } from "react";
 
 export const LayoutNav = () => {
   const path = usePathname();
-  //usePathname empieza con "/" entonces split the regresa el pirmer elemento vacio asi que es hacer el substring o darle un shift al array resultante
-  const loaf = path.substring(1, path.length).split("/");
+  const loaf = path.split("/").filter((f) => !!f);
   const { nameCollection } = useHeaderTagContext();
 
   return (
@@ -30,29 +29,31 @@ export const LayoutNav = () => {
                 />
                 {i === loaf.length - 1 ? (
                   <label className="trans-3 font-bold italic p-1 rounded-xl bg-[#ffffff1a]">
-                    {nameCollection.find((f) => f.id === l)?.name ?? "Elemento"}
+                    {l === "editar" || l === "nuevo"
+                      ? l === "editar"
+                        ? "Editar"
+                        : "Nuevo"
+                      : nameCollection.find((f) => f.id === l)?.name ??
+                        "Elemento"}
                   </label>
                 ) : (
                   <Link
                     className="trans-3 font-bold italic p-1 rounded-xl hover:bg-[#ffffff1a]"
-                    href={`/${l}`}
+                    href={`/${loaf.slice(0, i + 1).join("/")}`}
                   >
-                    {nameCollection.find((f) => f.id === l)?.name ?? "Elemento"}
+                    {l === "editar" || l === "nuevo"
+                      ? l === "editar"
+                        ? "Editar"
+                        : "Nuevo"
+                      : nameCollection.find((f) => f.id === l)?.name ??
+                        "Elemento"}
                   </Link>
                 )}
               </Fragment>
             );
           })}
       </div>
-      {path.includes("nuevo") ? (
-        <button
-          className="flex-center-3 regular-btn-padding-xl rounded-xl bg-neutral-400 text-neutral-600"
-          disabled
-        >
-          <Add color="currentColor" size={24} />
-          <label>Nuevo</label>
-        </button>
-      ) : (
+      {path === "/" && (
         <Link
           href={"/nuevo"}
           className="flex-center-3 regular-btn-padding-xl bg-accent rounded-xl"

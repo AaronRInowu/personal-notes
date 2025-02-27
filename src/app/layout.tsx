@@ -32,6 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full flex flex-col`}
       >
         <HeaderTagContextProvider>
+          <div id="modal-root-element" />
           <ToastContainer position="top-center" />
           <LayoutNav />
           <div className="grow">{children}</div>

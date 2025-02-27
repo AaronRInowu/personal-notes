@@ -1,10 +1,9 @@
-import { NotePreview } from "@/components/Cards/NotePreview/NotePreview";
 import { RedirectPage } from "@/components/Displays/RedirectPage";
-import { LabelArea } from "@/components/Inputs/LabelInput/LabelArea";
+import { EditCategory } from "@/components/Forms/EditItem/EditCategory";
 import { HeaderCrumbsSet } from "@/components/layout/HeaderCrumbsSet";
+import { ModalElementSet } from "@/components/layout/ModalElementSet";
 import { IserverPage } from "@/global/interfaces/general.interface";
 import { prisma } from "@/global/lib/prisma-client";
-import fontColorContrast from "font-color-contrast";
 
 export default async function NoteRedirect({
   params,
@@ -17,17 +16,18 @@ export default async function NoteRedirect({
       });
       return res;
     } catch (error) {
+      console.error(error);
       return;
     }
   };
   const tryNotes = async () => {
     try {
       const res = await prisma.notes.findMany({
-        where: { category: { id: { equals: categoryId } } },
-        include: { category: true },
+        where: { category: { id: categoryId } },
       });
       return res;
     } catch (error) {
+      console.error(error);
       return;
     }
   };
@@ -43,53 +43,9 @@ export default async function NoteRedirect({
       <HeaderCrumbsSet
         data={{ id: categoryId, name: catRes?.title ?? "Categoria" }}
       />
-      <main className="p-6 flex flex-col gap-3">
-        <header className="flex-center justify-between">
-          <h2
-            className={`skew-border regular-btn-padding ${
-              catRes.color ? "" : "bg-accent"
-            } italic font-bold text-xl`}
-            style={{
-              backgroundColor: catRes.color ?? "transparent",
-              color: fontColorContrast(catRes.color ?? "#ffffff"),
-            }}
-          >
-            {catRes.title}
-          </h2>
-          <div className="grid grid-cols-2 gap-3">
-            <label>
-              Creado: {new Date(catRes.createdAt).toLocaleDateString("es")}
-            </label>
-            <label>
-              Ultima actualización:{" "}
-              {new Date(
-                catRes.updatedAt ?? catRes.createdAt
-              ).toLocaleDateString("es")}
-            </label>
-          </div>
-        </header>
-        <div className="grow flex flex-col gap-3">
-          <LabelArea
-            readOnly
-            value={catRes.desc ?? ""}
-            containerClass="max-w-[550px]"
-            label="Descripción"
-          />
-          <h3 className="text-xl font-bold">Notas</h3>
-          <div className="max-w-full flex-center-3 overflow-auto">
-            {notesRes && notesRes.length > 0 ? (
-              notesRes.map((m) => {
-                return <NotePreview note={m} />;
-              })
-            ) : (
-              <div className="flex-center justify-center">
-                <label className="italic text-xl font-bold">
-                  No se encontraron notas
-                </label>
-              </div>
-            )}
-          </div>
-        </div>
+      <ModalElementSet />
+      <main>
+        <EditCategory notes={notesRes} category={catRes} />
       </main>
     </>
   );

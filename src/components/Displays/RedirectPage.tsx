@@ -10,7 +10,7 @@ export const RedirectPage = ({ href }: { href?: string }) => {
     if (href) {
       redirect(href);
     }
-  }, []);
+  }, [href]);
 
   return (
     <div className="w-full h-full flex-col flex-center-3 justify-center">

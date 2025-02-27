@@ -8,6 +8,7 @@ export default async function Home() {
     try {
       return await prisma.category.findMany();
     } catch (error) {
+      console.error(error);
       return;
     }
   };
@@ -28,6 +29,7 @@ export default async function Home() {
       });
       return res;
     } catch (error) {
+      console.error(error);
       return;
     }
   };
@@ -44,6 +46,7 @@ export default async function Home() {
         },
       });
     } catch (error) {
+      console.error(error);
       return;
     }
   };
@@ -98,7 +101,7 @@ export default async function Home() {
                   key={c.id}
                   href={`/${c.id}`}
                   style={{ backgroundColor: bg, color: fontColorContrast(bg) }}
-                  className="trans-3 skew-border regular-btn-padding text-center min-w-[120px] flex-center font-bold text-xl justify-center hover:scale-[1.1]"
+                  className="trans-3 skew-border regular-btn-padding text-center min-w-[120px] flex-center font-bold text-xl justify-center hover:scale-[1.06]"
                 >
                   {c.title}
                 </Link>
