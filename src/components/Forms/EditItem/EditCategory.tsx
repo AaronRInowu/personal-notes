@@ -1,17 +1,14 @@
 "use client";
 import { NotePreview } from "@/components/Cards/NotePreview/NotePreview";
-import { ModalTitle } from "@/components/Displays/ModalTitle";
 import { LabelArea } from "@/components/Inputs/LabelInput/LabelArea";
 import { ToggleButton } from "@/components/Inputs/ToggleButton";
-import { toastOptions } from "@/global/templates/general.template";
-import { deleteItem, patchCategory } from "@/services/general.services";
+import { ElimItem } from "@/components/Modals/ElimItem/ElimItem";
 import { Category, Notes } from "@prisma/client";
 import fontColorContrast from "font-color-contrast";
 import { Trash } from "iconsax-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import ReactModal from "react-modal";
-import { toast } from "react-toastify";
 
 export const EditCategory = ({
   category,
@@ -23,37 +20,10 @@ export const EditCategory = ({
   const router = useRouter();
   const [openModal, setOpenModal] = useState(false);
   const [enableEdit, setEnableEdit] = useState(false);
-  const [sureElim, setSureElim] = useState(false);
   const disableDelete = notes && notes.length > 0;
 
   const closeModal = () => {
     setOpenModal(false);
-  };
-
-  const handleActive = async () => {
-    try {
-      await patchCategory(category.id, { isActive: !category.isActive });
-      router.refresh();
-      closeModal();
-      toast.success(":)", toastOptions);
-    } catch (error) {
-      console.error(error);
-      toast.error(">:(", toastOptions);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (sureElim) {
-      try {
-        await deleteItem(category.id, "cat");
-        router.refresh();
-        router.push("/");
-        toast.success(":)", toastOptions);
-      } catch (error) {
-        console.error(error);
-        toast.error(">:(", toastOptions);
-      }
-    }
   };
 
   return (
@@ -127,69 +97,17 @@ export const EditCategory = ({
         isOpen={openModal}
         onRequestClose={closeModal}
       >
-        <div className="p-3 flex flex-col gap-3">
-          <ModalTitle title="Eliminar categoria" onClose={closeModal} />
-          <p className="max-w-[320px] self-center text-center py-3">
-            {sureElim ? (
-              "Presiona eliminar de nuevo para confirmar eliminación."
-            ) : (
-              <>
-                Quiere eliminar o desactivar <b>{category.title}</b>?
-              </>
-            )}
-          </p>
-          {disableDelete && (
-            <p className="text-danger text-sm">
-              *Elimina las notas relacionadas para habilitar la eliminacion
-            </p>
-          )}
-          {sureElim ? (
-            <div className="flex-center justify-between">
-              <button
-                type="button"
-                disabled={disableDelete}
-                onClick={handleDelete}
-                className="regular-btn-padding bg-danger text-white rounded-xl"
-              >
-                Eliminar
-              </button>
-              <button
-                type="button"
-                onClick={() => setSureElim(false)}
-                className="regular-btn-padding bg-neutral-200 rounded-xl"
-              >
-                Cancelar
-              </button>
-            </div>
-          ) : (
-            <div className="flex-center-3 justify-between">
-              <button
-                type="button"
-                onClick={closeModal}
-                className="regular-btn-padding bg-neutral-200 rounded-xl"
-              >
-                Cancelar
-              </button>
-              <div className="flex-center-3">
-                <button
-                  type="button"
-                  onClick={handleActive}
-                  className="regular-btn-padding bg-warning rounded-xl"
-                >
-                  {category.isActive ? "Desactivar" : "Activar"}
-                </button>
-                <button
-                  disabled={disableDelete}
-                  type="button"
-                  onClick={() => setSureElim(true)}
-                  className="regular-btn-padding bg-danger disabled:opacity-50 text-white rounded-xl"
-                >
-                  Eliminar
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        <ElimItem
+          item={{
+            id: category.id,
+            isActive: category.isActive,
+            title: category.title,
+          }}
+          onComplete={() => router.push("/")}
+          type="cat"
+          closeModal={closeModal}
+          disableDelete={disableDelete}
+        />
       </ReactModal>
     </>
   );

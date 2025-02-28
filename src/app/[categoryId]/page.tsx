@@ -43,7 +43,6 @@ export default async function NoteRedirect({
       <HeaderCrumbsSet
         data={{ id: categoryId, name: catRes?.title ?? "Categoria" }}
       />
-      <ModalElementSet />
       <main>
         <EditCategory notes={notesRes} category={catRes} />
       </main>

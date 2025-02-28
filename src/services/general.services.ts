@@ -26,3 +26,22 @@ export const deleteItem = async (id: string, type: "note" | "cat") => {
   }
   return { status: 404, msg: "no table" };
 };
+export const toggleItem = async (
+  id: string,
+  type: "note" | "cat",
+  isActive: boolean
+) => {
+  if (type === "note") {
+    return await prisma.notes.update({
+      data: { isActive: !isActive },
+      where: { id: id },
+    });
+  }
+  if (type === "cat") {
+    return await prisma.category.update({
+      data: { isActive: !isActive },
+      where: { id: id },
+    });
+  }
+  return { status: 404, msg: "no table" };
+};

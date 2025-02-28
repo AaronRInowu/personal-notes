@@ -39,6 +39,15 @@
   .main-container {
     @apply p-6 flex flex-col gap-3 h-full;
   }
+  .align-abs-middle {
+    @apply absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%];
+  }
+  .align-abs-x {
+    @apply absolute left-[50%] -translate-x-[50%];
+  }
+  .align-abs-y {
+    @apply absolute top-[50%] -translate-y-[50%];
+  }
 }
 .ReactModal__Overlay {
   background-color: #00000020 !important;
@@ -92,6 +101,9 @@ body {
 .bg-warning {
   background-color: $warning;
 }
+.bg-info {
+  background-color: $info;
+}
 
 //colores-texto
 .text-primary {
@@ -120,4 +132,7 @@ body {
 }
 .text-warnign {
   color: $warning;
+}
+.text-info {
+  color: $info;
 }

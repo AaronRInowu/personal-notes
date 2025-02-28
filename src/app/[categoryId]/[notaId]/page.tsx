@@ -48,7 +48,7 @@ export default async function NoteIdPage({
         data={{ id: categoryId, name: catRes?.title ?? "Categoria" }}
       />
       <HeaderCrumbsSet data={{ id: notaId, name: noteRes?.title ?? "Nota" }} />
-      <main>
+      <main className="h-full max-h-full overflow-auto">
         <EditNote note={noteRes} />
       </main>
     </>

@@ -16,7 +16,7 @@
       font-size: 0.6rem;
     }
   }
-  &:has(textarea:focus):not(:read-only) {
+  &:has(textarea:focus:not(:read-only)) {
     .place-label {
       top: -0.5rem;
       font-size: 0.6rem;

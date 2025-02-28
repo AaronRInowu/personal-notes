@@ -56,24 +56,18 @@ export default async function Home() {
 
   return (
     <main className="h-full p-6 max-w-full flex flex-col gap-3">
-      <div className="flex flex-col">
-        <h2 className="text-xl font-bold skew-border text-white bg-danger w-min regular-btn-padding">
-          Importantes!
-        </h2>
-        <div className="flex-center-3 max-w-full overflow-auto py-3">
-          {importantRes && importantRes.length > 0 ? (
-            importantRes.map((n) => {
+      {importantRes && importantRes.length > 0 && (
+        <div className="flex flex-col">
+          <h2 className="text-xl font-bold skew-border text-white bg-danger w-min regular-btn-padding">
+            Importantes!
+          </h2>
+          <div className="flex-center-3 max-w-full overflow-auto py-3">
+            {importantRes.map((n) => {
               return <NotePreview note={n} key={n.id} />;
-            })
-          ) : (
-            <div className="flex-center justify-center w-full p-6">
-              <label className="text-xl font-bold italic">
-                No se encontraron notas
-              </label>
-            </div>
-          )}
+            })}
+          </div>
         </div>
-      </div>
+      )}
       <div className="flex flex-col">
         <h2 className="text-xl font-bold">Ultimas actualizaciones</h2>
         <div className="flex-center-3 max-w-full overflow-auto py-3">
@@ -92,9 +86,9 @@ export default async function Home() {
       </div>
       <div className="flex flex-col">
         <h2 className="text-xl font-bold">Categorias</h2>
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3 py-3">
-          {catsRes && catsRes?.length > 0 ? (
-            catsRes.map((c) => {
+        {catsRes && catsRes?.length > 0 ? (
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3 py-3">
+            {catsRes.map((c) => {
               const bg = c.color ?? "#ad8cbb";
               return (
                 <Link
@@ -106,15 +100,15 @@ export default async function Home() {
                   {c.title}
                 </Link>
               );
-            })
-          ) : (
-            <div className="flex-center justify-center w-full p-6">
-              <label className="text-xl font-bold italic">
-                No se encontraron categorias
-              </label>
-            </div>
-          )}
-        </div>
+            })}
+          </div>
+        ) : (
+          <div className="flex-center justify-center w-full p-6">
+            <label className="text-xl font-bold italic text-center">
+              No se encontraron categorias
+            </label>
+          </div>
+        )}
       </div>
     </main>
   );

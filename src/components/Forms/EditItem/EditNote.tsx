@@ -64,20 +64,22 @@ export const EditNote = ({
   };
 
   return (
-    <form action={handleSubmit} className="main-container grow">
-      <header className="flex-center justify-between">
+    <form onSubmit={handleSubmit} className="main-container grow">
+      <header className="flex-center justify-between bg-secondary rounded-2xl p-3">
         <div className="flex-center-3">
           <ToggleButton
             selectedColor={"danger"}
-            className="w-min"
+            className="w-min bg-white p-3 hover:bg-white text-xl"
             text="Editar"
             selected={enableEdit}
             onClick={handleEdit}
           />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
           {note.category && (
-            <div className="flex-center-3">
+            <div className="flex-center-3 col-span-2 justify-center">
               <label
-                className={`skew-border regular-btn-padding ${
+                className={`skew-border regular-btn-padding text-2xl font-bold ${
                   note.category.color ? "" : "bg-accent"
                 }`}
                 style={{
@@ -89,8 +91,19 @@ export const EditNote = ({
               </label>
             </div>
           )}
+          <label>
+            Creado: {new Date(note.createdAt).toLocaleDateString("es")}
+          </label>
+          <label>
+            Ultima actualización:{" "}
+            {new Date(note.updatedAt ?? note.createdAt).toLocaleDateString(
+              "es"
+            )}
+          </label>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+      </header>
+      <div className="grow flex flex-col gap-3">
+        <div className="flex-center">
           <ToggleButton
             selectedColor={"accent"}
             disabled={!enableEdit}
@@ -104,42 +117,29 @@ export const EditNote = ({
               }))
             }
           />
-          <div className="flex-center">
-            <div className="border rounded-s-xl border-black aspect-square w-[37px] p-1">
-              <div
-                className="rounded-full h-full"
-                style={{
-                  backgroundColor: noteStatusSelect.find(
-                    (f) => formData.status === f.value
-                  )?.color,
-                }}
-              />
-            </div>
-            <LabelSlect
-              disabled={!enableEdit}
-              className="!rounded-s-none"
-              options={noteStatusSelect}
-              value={formData.status}
-              onChange={(e) =>
-                setFormData(({ status, ...rest }) => ({
-                  status: e.target.value as NoteStatus,
-                  ...rest,
-                }))
-              }
+          <div className="border rounded-s-xl border-black aspect-square w-[37px] p-1">
+            <div
+              className="rounded-full h-full"
+              style={{
+                backgroundColor: noteStatusSelect.find(
+                  (f) => formData.status === f.value
+                )?.color,
+              }}
             />
           </div>
-          <label>
-            Creado: {new Date(note.createdAt).toLocaleDateString("es")}
-          </label>
-          <label>
-            Ultima actualización:{" "}
-            {new Date(note.updatedAt ?? note.createdAt).toLocaleDateString(
-              "es"
-            )}
-          </label>
+          <LabelSlect
+            disabled={!enableEdit}
+            className="!rounded-s-none"
+            options={noteStatusSelect}
+            value={formData.status}
+            onChange={(e) =>
+              setFormData(({ status, ...rest }) => ({
+                status: e.target.value as NoteStatus,
+                ...rest,
+              }))
+            }
+          />
         </div>
-      </header>
-      <div className="grow flex flex-col gap-3">
         <LabelInput
           label="Titulo"
           name="title"
