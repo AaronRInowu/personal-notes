@@ -24,6 +24,7 @@ type IonlineUsers = {
 
 export const ChatPage = ({ chats }: { chats?: ItestChat }) => {
   const [selectedChat, setSelectedChat] = useState(0);
+  const [trampa, setTrampa] = useState(false);
   const [messages, setMessages] = useState<
     { author: string | number; text: string }[]
   >([]);
@@ -43,40 +44,37 @@ export const ChatPage = ({ chats }: { chats?: ItestChat }) => {
   const socket = socketRef?.current;
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:3002", {
-      auth: {
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiY29sbGVjdGlvbiI6InVzZXJzIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInNpZCI6IjRjZTZiNDMzLWNjNjAtNDQ3Yi1hYWNmLWQxYjJiY2ZhZDRkZiIsImlhdCI6MTc1NTcxOTk4NywiZXhwIjoxNzU1NzI3MTg3fQ.4euh00_dx-saaNyjdvP-jYCvVagej0g767iS2MmBpqM",
-      },
-      path: "/socket.io",
-      reconnectionAttempts: 5,
-      transports: ["websocket"],
-    });
-  }, []);
-
-  useEffect(() => {
     console.log(socket);
     if (!!socket) {
       console.log(socket.connected);
       if (!socket.connected) {
         socket.connect();
       } else {
-        console.log("news");
-        socket.emit("join-chat", { chatId: selectedChat });
+        socket.on("new-user", (data: IonlineUsers[]) => {
+          console.log("newsus");
+          setConnectedUsers(data);
+        });
+        socket.on("new-message", (data: socketChatResponse) => {
+          setMessages((prev) => [
+            { author: data.sender, text: data.content },
+            ...prev,
+          ]);
+        });
+        socket.on("no-access", () => {
+          console.log("?!");
+          setSelectedChat(0);
+          toast.error("No tienes acceso a este chat");
+        });
       }
-      socket.on("new-user", (data: IonlineUsers[]) => {
-        console.log("newsus");
-        setConnectedUsers(data);
-      });
-      socket.on("new-message", (data: socketChatResponse) => {
-        setMessages((prev) => [
-          { author: data.sender, text: data.content },
-          ...prev,
-        ]);
-      });
-      socket.on("no-accces", () => {
-        setSelectedChat(0);
-        toast.error("No tienes acceso a este chat");
+    } else {
+      socketRef.current = io("http://localhost:3002", {
+        auth: {
+          token:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiY29sbGVjdGlvbiI6InVzZXJzIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInNpZCI6IjZmZTk2NjU4LWYzYjYtNDBjZS04ZWYyLTI1MDA0NzllMmIyMSIsImlhdCI6MTc1NTcyNzY3MiwiZXhwIjoxNzU1NzM0ODcyfQ.C4_q9xRO_P1TCh0DfSDl8CJSCKP6S_0RYNEz5OZKeI0",
+        },
+        path: "/socket.io",
+        reconnectionAttempts: 5,
+        transports: ["websocket"],
       });
     }
   }, [socket, selectedChat]);
@@ -111,14 +109,31 @@ export const ChatPage = ({ chats }: { chats?: ItestChat }) => {
   };
 
   const getChatMessages = (chat: ItestChat["data"][0]) => {
+    socket?.emit("join-chat", { chatId: selectedChat });
     setSelectedChat(chat.id);
     setMessages(
       chat.messages.docs.map((m) => ({ author: m.sender, text: m.content }))
     );
   };
 
+  const handleReturn = () => {
+    if (socketUser !== "") {
+      setSocketUser("");
+    } else {
+      if (selectedChat !== 0) {
+        socket?.emit("close-chat", { chatId: selectedChat });
+        setSelectedChat(0);
+      } else {
+        socket?.disconnect();
+      }
+    }
+  };
+
   return (
     <div className="p-6 flex flex-col h-full gap-3">
+      <button onClick={handleReturn} className="shrink-0 bg-danger p-1">
+        <ArrowLeft2 size={20} color="#fff" />
+      </button>
       {selectedChat !== 0 ? (
         <>
           <div
@@ -137,12 +152,6 @@ export const ChatPage = ({ chats }: { chats?: ItestChat }) => {
             ) : (
               <>
                 <div className="flex-center-3">
-                  <button
-                    onClick={() => setSocketUser("")}
-                    className="shrink-0 bg-danger p-1"
-                  >
-                    <ArrowLeft2 size={20} color="#fff" />
-                  </button>
                   <h2 className="font-bold text-2xl">
                     Hablando como:{" "}
                     <i>
@@ -210,6 +219,14 @@ export const ChatPage = ({ chats }: { chats?: ItestChat }) => {
         </>
       ) : (
         <>
+          <button
+            type="button"
+            onClick={() => {
+              setTrampa(!trampa);
+            }}
+          >
+            Trampa
+          </button>
           <h2 className="font-bold text-2xl">Selecciona chat</h2>
           {chats && chats.data.length > 0 ? (
             chats.data.map((m) => {
