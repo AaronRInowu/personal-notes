@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id String @id @unique @default(cuid())
+  title String 
+  desc String?
+  color String?
+  notes Notes[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  isActive Boolean @default(true)
+}
+model Notes {
+  id String @id @unique @default(cuid())
+  title String
+  status NoteStatus @default(QUEUE)
+  desc String?
+  isImportant Boolean
+  categoryId String
+  category Category @relation(fields: [categoryId],references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  isActive Boolean @default(true)
+}
+enum NoteStatus {
+  QUEUE
+  STARTED
+  WAITING
+  IN_PROCESS
+  FINISHED
+}

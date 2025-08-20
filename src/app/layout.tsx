@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@/global/styles/global.scss";
 import { LayoutFooter } from "@/components/layout/LayoutFooter";
 import { LayoutNav } from "@/components/layout/LayoutNav";
+import { ToastContainer } from "react-toastify";
+import { HeaderTagContextProvider } from "@/contexts/HeaderContext";
+import { ModalElementSet } from "@/components/layout/ModalElementSet";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,9 +32,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full flex flex-col`}
       >
-        <LayoutNav />
-        <div className="grow">{children}</div>
-        <LayoutFooter />
+        <HeaderTagContextProvider>
+          <div id="modal-root-element" />
+          <ModalElementSet />
+          <ToastContainer position="top-center" />
+          <LayoutNav />
+          <div className="grow max-h-full overflow-auto">{children}</div>
+          <LayoutFooter />
+        </HeaderTagContextProvider>
       </body>
     </html>
   );

@@ -21,6 +21,50 @@
   .regular-btn-padding {
     @apply px-3 py-1;
   }
+  .regular-btn-padding-xl {
+    @apply px-5 py-3;
+  }
+  .trans-3 {
+    @apply transition-all duration-300;
+  }
+  .form-input {
+    @apply bg-transparent p-2 focus:outline-none;
+  }
+  .bot-border {
+    @apply border-b border-black;
+  }
+  .info-tag {
+    @apply shrink-0 flex-center justify-center rounded-xl;
+  }
+  .main-container {
+    @apply p-6 flex flex-col gap-3 h-full relative;
+  }
+  .align-abs-middle {
+    @apply absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%];
+  }
+  .align-abs-x {
+    @apply absolute left-[50%] -translate-x-[50%];
+  }
+  .align-abs-y {
+    @apply absolute top-[50%] -translate-y-[50%];
+  }
+}
+.ReactModal__Overlay {
+  background-color: #00000020 !important;
+}
+.default-modal {
+  width: 100%;
+  max-width: 85%;
+  min-width: 330px;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 0.75rem;
+  background-color: #fff;
+  &.sm {
+    width: unset;
+  }
 }
 
 body {
@@ -54,23 +98,47 @@ body {
 .bg-third-fade {
   background-color: $third-fade;
 }
+.bg-warning {
+  background-color: $warning;
+}
+.bg-info {
+  background-color: $info;
+}
+.bg-success {
+  background-color: $success;
+}
 
 //colores-texto
-.text-primary-bg {
+.text-primary {
   color: $primary;
 }
 .text-accent {
   color: $accent;
 }
-.text-primary {
+.text-danger {
+  color: $danger;
+}
+.text-text-primary {
   color: $text-primary;
 }
 .text-secondary {
   color: $secondary;
 }
+.text-secondary-fade {
+  color: $secondary-fade;
+}
 .text-third {
   color: $third;
 }
-.text-danger {
-  color: $danger;
+.text-third-fade {
+  color: $third-fade;
+}
+.text-warnign {
+  color: $warning;
+}
+.text-info {
+  color: $info;
+}
+.text-success {
+  color: $success;
 }
