@@ -22,9 +22,9 @@ export default async function Home() {
           category: true,
         },
         orderBy: {
-          updatedAt: {
-            sort: "asc",
-          },
+          // updatedAt: {
+          //   sort: "asc",
+          // },
         },
       });
       return res;
@@ -36,11 +36,7 @@ export default async function Home() {
   const tryLatest = async () => {
     try {
       return await prisma.notes.findMany({
-        orderBy: {
-          updatedAt: {
-            sort: "asc",
-          },
-        },
+        orderBy: { updatedAt: "desc" },
         include: {
           category: true,
         },
@@ -56,6 +52,32 @@ export default async function Home() {
 
   return (
     <main className="h-full p-6 max-w-full flex flex-col gap-3">
+      <div className="flex flex-col">
+        <h2 className="text-xl font-bold">Categorias</h2>
+        {catsRes && catsRes?.length > 0 ? (
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3 py-3">
+            {catsRes.map((c) => {
+              const bg = c.color ?? "#ad8cbb";
+              return (
+                <Link
+                  key={c.id}
+                  href={`/${c.id}`}
+                  style={{ backgroundColor: bg, color: fontColorContrast(bg) }}
+                  className="trans-3 skew-border regular-btn-padding text-center min-w-[120px] flex-center font-bold text-xl justify-center hover:scale-[1.06]"
+                >
+                  {c.title}
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="flex-center justify-center w-full p-6">
+            <label className="text-xl font-bold italic text-center">
+              No se encontraron categorias
+            </label>
+          </div>
+        )}
+      </div>
       {importantRes && importantRes.length > 0 && (
         <div className="flex flex-col">
           <h2 className="text-xl font-bold skew-border text-white bg-danger w-min regular-btn-padding">
@@ -83,32 +105,6 @@ export default async function Home() {
             </div>
           )}
         </div>
-      </div>
-      <div className="flex flex-col">
-        <h2 className="text-xl font-bold">Categorias</h2>
-        {catsRes && catsRes?.length > 0 ? (
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3 py-3">
-            {catsRes.map((c) => {
-              const bg = c.color ?? "#ad8cbb";
-              return (
-                <Link
-                  key={c.id}
-                  href={`/${c.id}`}
-                  style={{ backgroundColor: bg, color: fontColorContrast(bg) }}
-                  className="trans-3 skew-border regular-btn-padding text-center min-w-[120px] flex-center font-bold text-xl justify-center hover:scale-[1.06]"
-                >
-                  {c.title}
-                </Link>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="flex-center justify-center w-full p-6">
-            <label className="text-xl font-bold italic text-center">
-              No se encontraron categorias
-            </label>
-          </div>
-        )}
       </div>
     </main>
   );

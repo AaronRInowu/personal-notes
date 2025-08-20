@@ -1,12 +1,12 @@
 import { RedirectPage } from "@/components/Displays/RedirectPage";
 import { EditCategory } from "@/components/Forms/EditItem/EditCategory";
 import { HeaderCrumbsSet } from "@/components/layout/HeaderCrumbsSet";
-import { ModalElementSet } from "@/components/layout/ModalElementSet";
 import { IserverPage } from "@/global/interfaces/general.interface";
 import { prisma } from "@/global/lib/prisma-client";
 
 export default async function NoteRedirect({
   params,
+  searchParams,
 }: IserverPage<{ categoryId: string }>) {
   const { categoryId } = await params;
   const tryCat = async () => {
@@ -24,6 +24,7 @@ export default async function NoteRedirect({
     try {
       const res = await prisma.notes.findMany({
         where: { category: { id: categoryId } },
+        orderBy: { updatedAt: "desc" },
       });
       return res;
     } catch (error) {
@@ -43,8 +44,12 @@ export default async function NoteRedirect({
       <HeaderCrumbsSet
         data={{ id: categoryId, name: catRes?.title ?? "Categoria" }}
       />
-      <main>
-        <EditCategory notes={notesRes} category={catRes} />
+      <main className="max-h-full h-full">
+        <EditCategory
+          notes={notesRes}
+          category={catRes}
+          searchParams={await searchParams}
+        />
       </main>
     </>
   );

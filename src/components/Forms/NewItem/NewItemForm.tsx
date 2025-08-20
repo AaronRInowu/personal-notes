@@ -1,4 +1,5 @@
 "use client";
+import { ModalTitle } from "@/components/Displays/ModalTitle";
 import { ColorPicker } from "@/components/Inputs/ColorPicker/ColorPicker";
 import { LabelArea } from "@/components/Inputs/LabelInput/LabelArea";
 import { LabelInput } from "@/components/Inputs/LabelInput/LabelInput";
@@ -11,15 +12,23 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 
-export const NewItemForm = ({ categories }: { categories?: Category[] }) => {
+export const NewItemForm = ({
+  onClose,
+  fullCats,
+  category,
+}: {
+  onClose?: () => void;
+  fullCats?: Category[];
+  category?: Category;
+}) => {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    itemType: "",
+    itemType: category ? "note" : "",
     color: "#ad8cbb",
     title: "",
     desc: "",
     isImportant: false,
-    category: "",
+    category: category ? category.id : "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const isCat = formData.itemType === "cat";
@@ -48,6 +57,9 @@ export const NewItemForm = ({ categories }: { categories?: Category[] }) => {
           toast.success(":) Nota", toastOptions);
           router.refresh();
         }
+        if (onClose) {
+          onClose();
+        }
       } catch (error) {
         console.error(error);
         toast.error(">:(", toastOptions);
@@ -69,7 +81,7 @@ export const NewItemForm = ({ categories }: { categories?: Category[] }) => {
       isClean = false;
     }
     if (itemType === "note") {
-      if (!category || !categories?.some((c) => c.id === category)) {
+      if (!category || !fullCats?.some((c) => c.id === category)) {
         setErrors((prev) => ({ category: "Seleccione categoria", ...prev }));
         isClean = false;
       }
@@ -81,34 +93,39 @@ export const NewItemForm = ({ categories }: { categories?: Category[] }) => {
   };
   return (
     <form action={handleSubmit} className="p-6 flex flex-col gap-3 h-full">
-      <h2 className="text-xl font-bold">Nuevo elemento</h2>
-      <div className="flex flex-col">
-        <div className="flex-center-3">
-          <ToggleButton
-            text="Categoria"
-            selected={formData.itemType === "cat"}
-            onClick={() =>
-              setFormData(({ itemType, ...rest }) => ({
-                itemType: "cat",
-                ...rest,
-              }))
-            }
-          />
-          <ToggleButton
-            text="Nota"
-            selected={formData.itemType === "note"}
-            onClick={() =>
-              setFormData(({ itemType, ...rest }) => ({
-                itemType: "note",
-                ...rest,
-              }))
-            }
-          />
+      <ModalTitle
+        title={category ? "Nueva nota" : "Nuevo elemento"}
+        onClose={onClose}
+      />
+      {!category && (
+        <div className="flex flex-col">
+          <div className="flex-center-3">
+            <ToggleButton
+              text="Categoria"
+              selected={formData.itemType === "cat"}
+              onClick={() =>
+                setFormData(({ itemType, ...rest }) => ({
+                  itemType: "cat",
+                  ...rest,
+                }))
+              }
+            />
+            <ToggleButton
+              text="Nota"
+              selected={formData.itemType === "note"}
+              onClick={() =>
+                setFormData(({ itemType, ...rest }) => ({
+                  itemType: "note",
+                  ...rest,
+                }))
+              }
+            />
+          </div>
+          {errors.itemType && (
+            <label className="text-danger">*{errors.itemType}</label>
+          )}
         </div>
-        {errors.itemType && (
-          <label className="text-danger">*{errors.itemType}</label>
-        )}
-      </div>
+      )}
       <LabelInput
         label="Titulo"
         name="title"
@@ -158,18 +175,20 @@ export const NewItemForm = ({ categories }: { categories?: Category[] }) => {
                   }))
                 }
               />
-              <LabelSlect
-                options={
-                  categories?.map((m) => ({ value: m.id, name: m.title })) ?? []
-                }
-                value={formData.category}
-                onChange={(e) =>
-                  setFormData(({ category, ...rest }) => ({
-                    category: e.target.value,
-                    ...rest,
-                  }))
-                }
-              />
+              {!category && (
+                <LabelSlect
+                  options={
+                    fullCats?.map((m) => ({ value: m.id, name: m.title })) ?? []
+                  }
+                  value={formData.category}
+                  onChange={(e) =>
+                    setFormData(({ category, ...rest }) => ({
+                      category: e.target.value,
+                      ...rest,
+                    }))
+                  }
+                />
+              )}
             </div>
           )}
         </>

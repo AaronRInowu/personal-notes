@@ -39,10 +39,8 @@ export const EditNote = ({
       if (validateSubmit()) {
         throw { msg: "Fallo validacion" };
       }
-      const res = await patchNote(note.id, rest);
-      if (!!res) {
-        router.refresh();
-      }
+      await patchNote(note.id, rest);
+      router.refresh();
       toast.success(":)", toastOptions);
     } catch (error) {
       console.error(error);
@@ -65,7 +63,7 @@ export const EditNote = ({
 
   return (
     <form onSubmit={handleSubmit} className="main-container grow">
-      <header className="flex-center justify-between bg-secondary rounded-2xl p-3">
+      <header className="flex-center justify-between bg-accent rounded-2xl p-3">
         <div className="flex-center-3">
           <ToggleButton
             selectedColor={"danger"}

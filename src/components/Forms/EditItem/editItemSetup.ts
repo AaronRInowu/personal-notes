@@ -1,4 +1,4 @@
-import { Notes } from "@prisma/client";
+import { Category, Notes } from "@prisma/client";
 
 export const returnNoteInitial = (note: Notes) => {
   return {
@@ -7,5 +7,12 @@ export const returnNoteInitial = (note: Notes) => {
     update: "",
     status: note.status,
     isImportant: note.isImportant,
+  };
+};
+export const returnCategoryInitial = (note: Category) => {
+  return {
+    title: note.title,
+    desc: note.desc ?? "",
+    color: note.color ?? "#fff",
   };
 };

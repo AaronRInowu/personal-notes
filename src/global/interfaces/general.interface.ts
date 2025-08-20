@@ -9,6 +9,18 @@ export type FullNote = Notes & {
   category?: Category;
 };
 
+export interface IpaginationMeta {
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  limit: number;
+  nextPage: null | number;
+  page: number;
+  pagingCounter: number;
+  prevPage: null | number;
+  totalDocs: number;
+  totalPages: number;
+}
+
 export type TsystemColors =
   | "primary"
   | "secondary"
@@ -17,4 +29,5 @@ export type TsystemColors =
   | "third-fade"
   | "accent"
   | "danger"
-  | "text-primary";
+  | "text-primary"
+  | "successs";

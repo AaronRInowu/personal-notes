@@ -20,7 +20,8 @@ export const LabelInput = (props: IlblInp) => {
   return (
     <div className={`lbl-container flex flex-col relative ${containerClass}`}>
       <label
-        className={`absolute place-label trans-3 top-2 left-2 ${labelClass}`}
+        // className={`absolute place-label trans-3 top-2 left-2 ${labelClass}`}
+        className={`place-label trans-3 ${labelClass}`}
       >
         {label}
       </label>

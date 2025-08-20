@@ -33,11 +33,11 @@
   .bot-border {
     @apply border-b border-black;
   }
-  .info-circle {
-    @apply shrink-0 flex-center justify-center rounded-full;
+  .info-tag {
+    @apply shrink-0 flex-center justify-center rounded-xl;
   }
   .main-container {
-    @apply p-6 flex flex-col gap-3 h-full;
+    @apply p-6 flex flex-col gap-3 h-full relative;
   }
   .align-abs-middle {
     @apply absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%];
@@ -104,6 +104,9 @@ body {
 .bg-info {
   background-color: $info;
 }
+.bg-success {
+  background-color: $success;
+}
 
 //colores-texto
 .text-primary {
@@ -135,4 +138,7 @@ body {
 }
 .text-info {
   color: $info;
+}
+.text-success {
+  color: $success;
 }

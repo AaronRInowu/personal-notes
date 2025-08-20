@@ -37,7 +37,6 @@ export default async function NoteIdPage({
   };
   const catRes = await tryCat();
   const noteRes = await tryNote();
-
   if (!noteRes) {
     return <RedirectPage />;
   }

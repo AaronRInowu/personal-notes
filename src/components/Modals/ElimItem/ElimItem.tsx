@@ -10,7 +10,7 @@ interface IelimItem {
   closeModal?: () => void;
   item: { title: string; id: string; isActive: boolean };
   type: "cat" | "note";
-  disableDelete?: Boolean;
+  disableDelete?: boolean;
   onComplete?: () => void;
 }
 
