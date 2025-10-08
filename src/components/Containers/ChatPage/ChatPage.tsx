@@ -50,6 +50,7 @@ export const ChatPage = ({ chats }: { chats?: ItestChat }) => {
       if (!socket.connected) {
         socket.connect();
       } else {
+        socket.emit("register");
         socket.on("new-user", (data: IonlineUsers[]) => {
           console.log("newsus");
           setConnectedUsers(data);
@@ -70,7 +71,7 @@ export const ChatPage = ({ chats }: { chats?: ItestChat }) => {
       socketRef.current = io("http://localhost:3002", {
         auth: {
           token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiY29sbGVjdGlvbiI6InVzZXJzIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInNpZCI6IjZmZTk2NjU4LWYzYjYtNDBjZS04ZWYyLTI1MDA0NzllMmIyMSIsImlhdCI6MTc1NTcyNzY3MiwiZXhwIjoxNzU1NzM0ODcyfQ.C4_q9xRO_P1TCh0DfSDl8CJSCKP6S_0RYNEz5OZKeI0",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiY29sbGVjdGlvbiI6InVzZXJzIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInNpZCI6IjNkMzY2MjkyLWQ1YjktNDgyOC04NmEzLTU0NWUzOGJlMzc1MyIsImlhdCI6MTc1NTc5OTMwNCwiZXhwIjoxNzU1ODA2NTA0fQ.vg3lDpSdEkKhVbnD_pQAM_Q602NtgigbP_u3HXoFYys",
         },
         path: "/socket.io",
         reconnectionAttempts: 5,
@@ -100,7 +101,6 @@ export const ChatPage = ({ chats }: { chats?: ItestChat }) => {
         };
         await axiosInstance.post("/chat-messages", temp);
         setTempMsg("");
-        //socket.emit
       } catch (error) {
         console.error(error);
         toast.error("Error");
@@ -109,7 +109,7 @@ export const ChatPage = ({ chats }: { chats?: ItestChat }) => {
   };
 
   const getChatMessages = (chat: ItestChat["data"][0]) => {
-    socket?.emit("join-chat", { chatId: selectedChat });
+    socket?.emit("join-chat", { chatId: chat.id });
     setSelectedChat(chat.id);
     setMessages(
       chat.messages.docs.map((m) => ({ author: m.sender, text: m.content }))
