@@ -71,7 +71,7 @@ export const ChatPage = ({ chats }: { chats?: ItestChat }) => {
       socketRef.current = io("http://localhost:3002", {
         auth: {
           token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiY29sbGVjdGlvbiI6InVzZXJzIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInNpZCI6IjNkMzY2MjkyLWQ1YjktNDgyOC04NmEzLTU0NWUzOGJlMzc1MyIsImlhdCI6MTc1NTc5OTMwNCwiZXhwIjoxNzU1ODA2NTA0fQ.vg3lDpSdEkKhVbnD_pQAM_Q602NtgigbP_u3HXoFYys",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiY29sbGVjdGlvbiI6InVzZXJzIiwiZW1haWwiOiIycmcyckBnbWFpbC5jb20iLCJzaWQiOiIwY2JiNGQ3MS05YTNjLTRlNzctOGEyMC0yNWJiMjk2OWUyM2QiLCJyb2xlcyI6WyJhZG1pbiJdLCJpYXQiOjE3NjA5NzcyODcsImV4cCI6MTc2MDk4NDQ4N30.jCqgMO8RilK8w0FWwwUfxLRJNIaBG4ORvLL5ul-J8SQ",
         },
         path: "/socket.io",
         reconnectionAttempts: 5,
@@ -96,7 +96,7 @@ export const ChatPage = ({ chats }: { chats?: ItestChat }) => {
       try {
         const temp = {
           sender: parseInt(socketUser),
-          chat: 1,
+          chat: selectedChat,
           content: tempMsg,
         };
         await axiosInstance.post("/chat-messages", temp);
